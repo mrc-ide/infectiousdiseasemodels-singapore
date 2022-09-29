@@ -1,14 +1,14 @@
 r <- user(0.1) # growth rate
-N0 <- user(1)  # initial population.
+N_init <- user(1)  # initial population.
 
 dt <- 0.01
 time <- step * dt
 
 ## Deterministic solution
-output(N_det) <- N0 * exp(r*time)
+output(N_det) <- N_init * exp(r * time)
 
 ## Stochastic solution
-initial(N_stoch) <- N0
+initial(N_stoch) <- N_init
 
 n_birth <- rbinom(N_stoch, r * dt)
 
