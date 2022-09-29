@@ -21,16 +21,10 @@
 ### model dynamics
 ################################################################################
 
-deriv (S) <- - S/N * (beta_r * I_r + 
-                        beta_d * I_d)
-
-deriv (E) <- S/N * (beta_r * I_r + 
-                      beta_d * I_d) - 
-  gamma * E
-
+deriv (S) <- - S / N * (beta_r * I_r + beta_d * I_d)
+deriv (E) <- S / N * (beta_r * I_r + beta_d * I_d) - gamma * E
 deriv (I_d) <- cfr * gamma * E - sigma_d * I_d 
 deriv (I_r) <- (1 - cfr) * gamma * E - sigma_r * I_r
-
 deriv(R) <- sigma_r * I_r
 deriv(Dead) <- sigma_d * I_d
 
@@ -55,8 +49,8 @@ Infectious <- I_d + I_r
 
 initial(S) <- N
 initial(E) <- 0
-initial(I_d) <- I0 / 2
-initial(I_r) <- I0 / 2
+initial(I_d) <- I_init / 2
+initial(I_r) <- I_init / 2
 initial(R) <- 0 
 initial(Dead) <- 0
 initial(cumul_onset) <- 0
@@ -66,7 +60,7 @@ initial(cumul_onset) <- 0
 ################################################################################
 
 N <- user(5e+5, min = 0) # population size with default value
-I0 <- user(1, min = 0) # initial number of infected individuals 
+I_init <- user(1, min = 0) # initial number of infected individuals 
 L <- user(9.92, min = 0) # mean latency
 mu_d <- user(8.0, min = 0) # time from onset to death in days
 mu_r <- user(16.98, min = 0) # mean time from onset to recovery in days
@@ -77,7 +71,7 @@ R0_after <- user(0.5, min = 0)
 t_intervention <- user(170, min = 0) # time of interventions
 
 ### compute other parameters from the ones above
-gamma <- 1/L
+gamma <- 1 / L
 sigma_d <- 1 / mu_d
 sigma_r <- 1 / mu_r
 beta_r <- Rt / mu_r

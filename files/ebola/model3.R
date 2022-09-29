@@ -1,10 +1,10 @@
 ################################################################################
-# Model 3 elaborates on Model 2 by including an accute death infectious stage 
-# representing the infectiouness associated with unsafe burials procedures.
+# Model 3 elaborates on Model 2 by including an acute death infectious stage 
+# representing the infectiousness associated with unsafe burials procedures.
 # A given proportion of cases who dies and doesn't go to hospital and are buried 
 # unsafely. For infectious cases who will die, we assume that a proportion 
-# 'p_funeral' of onward transmission potential would occur during the accute 
-# death stage mentionned above.
+# 'p_funeral' of onward transmission potential would occur during the acute 
+# death stage mentioned above.
 # 
 # S = # susceptible 
 # E = # latent (split in two for more realistic distributed latency)
@@ -22,25 +22,20 @@
 ### model dynamics
 ################################################################################
 
-deriv (S) <- - S/N * (beta_r * (I_r + C_r) + 
+deriv (S) <- - S / N * (beta_r * (I_r + C_r) + 
                          beta_d * (I_d + C_d + beta__acute_d * A_d))
 
-deriv (E_1) <- S/N * (beta_r * (I_r + C_r) + 
+deriv (E_1) <- S / N * (beta_r * (I_r + C_r) + 
                          beta_d * (I_d + C_d + beta__acute_d * A_d)) - 
                          gamma_1 * E_1
 deriv (E_2) <- gamma_1 * E_1 - gamma_2 * E_2
-
 deriv (I_d) <- cfr * gamma_2 * E_2 - sigma_h * I_d 
 deriv (I_r) <- (1 - cfr) * gamma_2 * E_2 - sigma_h * I_r
-
 deriv(H_d) <- p_hosp * sigma_h * I_d - sigma_d * H_d
 deriv(C_d) <- (1 - p_hosp) * sigma_h * I_d - sigma_d * C_d
-
 deriv(H_r) <- p_hosp * sigma_h * I_r - sigma_r * H_r
 deriv(C_r) <- (1 - p_hosp) * sigma_h * I_r - sigma_r * C_r
-
 deriv(A_d) <- (1 - p_safe) * sigma_d * C_d - sigma_acute_d * A_d
-
 deriv(R) <- sigma_r * (H_r + C_r)
 deriv(Dead) <- sigma_d * (H_d + C_d)
 
@@ -69,8 +64,8 @@ safe_community_burial <- p_safe * sigma_d * C_d
 initial(S) <- N
 initial(E_1) <- 0
 initial(E_2) <- 0
-initial(I_d) <- I0 / 2
-initial(I_r) <- I0 / 2
+initial(I_d) <- I_init / 2
+initial(I_r) <- I_init / 2
 initial(H_d) <- 0
 initial(C_d) <- 0
 initial(A_d) <- 0
@@ -86,7 +81,7 @@ initial(cumul_death_h)  <- 0
 ################################################################################
 
 N <- user(5e+5, min = 0) # population size with default value
-I0 <- user(1, min = 0) # initial number of infected individuals 
+I_init <- user(1, min = 0) # initial number of infected individuals 
 L <- user(9.92, min = 0) # mean latency
 L_frac_1 <- user(0.212, min = 0, max = 1) # fraction of latency spent in first latent compartment
 mu_d <- user(8.0, min = 0) # time from admission to death in days
@@ -115,8 +110,7 @@ beta_r <- R0 / mu_r
 beta_d <- R0 * p_funeral / mu_d
 beta__acute_d <- mu_d
 # get an Rt (assuming no running out of suceptible, i.e. S~N)
-Rt <- cfr * beta_d * 
-  (p_hosp * mu_h + (1 - p_hosp) * mu_d + 
+Rt <- cfr * beta_d * (p_hosp * mu_h + (1 - p_hosp) * mu_d + 
      (1 - p_hosp) * (1 - p_safe) * beta__acute_d) + 
   (1 - cfr) * beta_r * (p_hosp * mu_h + (1 - p_hosp) * mu_r)
 
