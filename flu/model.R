@@ -1,7 +1,7 @@
 # initial conditions
-initial(S) <- N - I_0
+initial(S) <- N - I_init
 initial(E) <- 0
-initial(I) <- I_0
+initial(I) <- I_init
 initial(R) <- 0
 
 # equations
@@ -14,7 +14,7 @@ deriv(R) <- sigma * I
 R_0 <- user(1.5)
 L <- user(1)
 D <- user(1)
-I_0 <- 1 # default value
+I_init <- 1 # default value
 N <- 370
 
 # convert parameters
@@ -23,4 +23,4 @@ sigma <- 1 / D
 beta <- R_0 * sigma
 
 #Output
-output(onset) <- if(t == 0) I_0 else gamma*E
+output(onset) <- if(t == 0) I_init else gamma * E
