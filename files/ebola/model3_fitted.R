@@ -22,11 +22,11 @@
 ### model dynamics
 ################################################################################
 
-deriv (S) <- - S / N * (beta_r * (I_r + C_r) + 
-                         beta_d * (I_d + C_d + beta__acute_d * A_d))
+deriv (S) <- -S / N * (beta_r * (I_r + C_r) + 
+                         beta_d * (I_d + C_d + beta_acute_d * A_d))
 
 deriv (E_1) <- S / N * (beta_r * (I_r + C_r) + 
-                         beta_d * (I_d + C_d + beta__acute_d * A_d)) - 
+                         beta_d * (I_d + C_d + beta_acute_d * A_d)) - 
                          gamma_1 * E_1
 deriv (E_2) <- gamma_1 * E_1 - gamma_2 * E_2
 deriv (I_d) <- cfr * gamma_2 * E_2 - sigma_h * I_d 
@@ -102,18 +102,17 @@ mu_h_before <- user(5.79, min = 0) # mean onset to hosp. delay before interventi
 mu_h_after <- user(1.43, min = 0) # mean onset to hosp. delay after interventions ### default value was fitted to data
 
 ### compute other parameters from the ones above
-gamma_1 <- 1/(L*L_frac_1)
-gamma_2 <- 1/(L*(1 - L_frac_1))
+gamma_1 <- 1 / (L * L_frac_1)
+gamma_2 <- 1 / (L * (1 - L_frac_1))
 sigma_h <- 1 / mu_h
 sigma_d <- 1 / (mu_d - mu_h)
 sigma_r <- 1 / (mu_r - mu_h)
 beta_r <- R0 / mu_r
 beta_d <- R0 * p_funeral / mu_d
-beta__acute_d <- mu_d
+beta_acute_d <- mu_d
 # get an Rt (assuming no running out of suceptible, i.e. S~N)
-Rt <- cfr * beta_d * 
-  (p_hosp * mu_h + (1 - p_hosp) * mu_d + 
-     (1 - p_hosp) * (1 - p_safe) * beta__acute_d) + 
+Rt <- cfr * beta_d * (p_hosp * mu_h + (1 - p_hosp) * mu_d + 
+     (1 - p_hosp) * (1 - p_safe) * beta_acute_d) + 
   (1 - cfr) * beta_r * (p_hosp * mu_h + (1 - p_hosp) * mu_r)
 
 p_safe <- if (t <= t_intervention) p_safe_before else p_safe_after 
@@ -122,6 +121,3 @@ mu_h <- if (t <= t_intervention) mu_h_before else mu_h_after
 ### additional things to output
 output(mu_h) <- TRUE
 output(p_safe) <- TRUE
-
-
-
