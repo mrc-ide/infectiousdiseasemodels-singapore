@@ -13,8 +13,8 @@ dt <- 0.01
 time <- step * dt
 
 ## Deterministic solution
-I_init <- if (I_init_at_steady_state > 0) I_star else I_init
-output(I_det) <- I_star / (1 + (I_star / I_init - 1) * exp(-(beta - sigma) * time))
+I_det_init <- if (I_init_at_steady_state > 0) I_star else I_init
+output(I_det) <- I_star / (1 + (I_star / I_det_init - 1) * exp(-(beta - sigma) * time))
 
 ## Stochastic solution
 initial(I) <- if (I_init_at_steady_state > 0) round(I_star) else I_init
