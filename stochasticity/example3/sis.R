@@ -2,7 +2,7 @@ beta <- user(0.5) # contact rate
 sigma <- user(0.3) # recovery
 N <- user(1000)  # total population.
 
-is_I_init_at_steady_state <- user(TRUE)
+initialise_at_steady_state <- user(TRUE)
 
 I_init <- user(1)
 
@@ -13,11 +13,11 @@ dt <- 0.01
 time <- step * dt
 
 ## Deterministic solution
-I_det <- if (is_I_init_at_steady_state > 0) 
+I_det <- if (initialise_at_steady_state) 
   I_star / (1 + (I_star / I_det_init - 1) * exp(-(beta - sigma) * time)) else 0
 
 ## Stochastic solution
-initial(I) <- if (is_I_init_at_steady_state > 0) round(I_star) else I_init
+initial(I) <- if (initialise_at_steady_state) round(I_star) else I_init
 
 FOI <- beta * I / N
 S <- N - I
